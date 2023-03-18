@@ -1,0 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200&display=swap');
+
+*{
+    margin: 10px; 
+    padding: 100px;
+    font-family: "Plus Jakarta Sans", sans-serif;
+}
+
+/* Nav Bar Top */
+
+.barra{
+    box-sizing: border-box;
+    position: absolute;
+    width: 1440px;
+    height: 100px;
+    left: 0px;
+    top: 0px;
+    background: #306BB3;
+    border: 1px solid #306BB3;
+}
+
+
+
+
