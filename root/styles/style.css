@@ -96,3 +96,13 @@ footer>div>img{
     width: 50%;
     height: auto;
 }
+.LogosRedes{
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+.CajitasFooter{
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
