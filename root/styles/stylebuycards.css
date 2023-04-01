@@ -41,10 +41,12 @@ main>div{
     display: flex;
     background-color: #DEE5ED;
     flex-direction: column;
-    width: 20%;
-    border-radius: 4px;
+    width: 80%;
+    border-radius: 6px;
     margin: 1%;
-}
+    border: 1px;
+
+    }
 .Name{
     display: flex;
     justify-content: space-between;
@@ -55,8 +57,9 @@ main>div{
 .Card{
     background-color: white;
     width: 80%;
+    height: 70%;
     align-self: center;
-    border-radius: 4px;
+    border-radius: 10px;
     padding: 7% 10%;
 }
 .Botontarjeta{
@@ -66,9 +69,17 @@ main>div{
     border-style: none;
     border-radius: 4px;
 }
+
 section{
     display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: 1fr 1fr;
+    width: 100%;
+    height: 100%;
+    justify-items: center;
+    grid-row-gap: 40px;
 }
+
 section>div>ul>li>a{
     color: black;
     text-decoration: none;
@@ -133,4 +144,16 @@ footer>div>img{
     display: flex;
     flex-direction: column;
     gap: 25px;
+}
+.menu{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;    
+}
+main>div>a{
+    color: #486284;
+    width: 70%;
+}
+main>div>a:hover{
+    color: aqua;
 }
