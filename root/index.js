@@ -1,98 +1,142 @@
-// const url = 'https://pokeapi.co/api/v2/pokemon';
+const url = "https://pokeapi.co/api/v2/pokemon";
 
-// const character = fetch(`${url}character`)
-//     .then(res => res.json())
-//     .then(data => {
-//         data.results.forEach(character => {
-//             console.log(character.name)
-//         });
-//     })
+let offset = 0;
+let limit = 20;
+let countCards = 0;
+let pokemons = [];
+let currentType = "all";
 
-// const   fetchApi = async (url) => {
-//     try {
-//         const res = await fetch(url);
-//         const data = await res.json();
-//         console.log(data);       
-//     } catch (error) {
-//         console.log(error)
-//     }
-// }
-// fetchApi(url);
+const parentDiv = document.getElementById("container");
 
-// const url = 'https://rickandmortyapi.com/api/character';
-// const parentElement = document.getElementById('container');
-
-// const   fetchApi = async (url) => {
-//     try {
-//         const res = await fetch(url);
-//         const data = await res.json();
-//         data.results.forEach(element => {
-//             const newElement = document.createElement('p');
-//             const img = document.createElement('img');
-//             newElement.textContent = `nombre : ${element.name}`
-//             img.src = element.image;
-//             parentElement.appendChild(img);
-//             parentElement.appendChild(newElement);
-//         });
-//     }   
-//     catch (error) {
-//         const errorMsg = document.createElement('p');
-//         errorMsg.textContent = `nombre : ${error.message}`
-//         parentElement.appendChild(errorMsg);
-//     }
-// }
-// fetchApi(url)
-
-const url = 'https://pokeapi.co/api/v2/pokemon';
-const parentDiv = document.getElementById('container');
-
-const fetchApi = async (url) => {
-    try {
-        const res = await fetch(url);
-        const data = await res.json();
-        data.results.forEach(element => {
-            const divCard = document.createElement('div');
-            divCard.className = "Cards";
-            const divName = document.createElement('div');
-            divName.className = "Name";
-            const pName = document.createElement('p');
-            const iHeart = document.createElement('i');
-            iHeart.className = "fa-sharp fa-regular fa-heart";
-            const img = document.createElement('img');
-            img.className = "Card";
-            const divFooter = document.createElement('div');
-            divFooter.className = "Name";
-            const pPower = document.createElement('p');
-            const btn = document.createElement('button');
-            btn.textContent = "Buy";
-            btn.className = "Botontarjeta";
-            
-            pName.textContent = element.name;
-            getByUrl(element.url).then(res => { 
-                img.src = res.sprites.other["home"].front_default;
-                pPower.textContent = `Power level: ${res.base_experience}`;
-                divName.appendChild(pName);
-                divName.appendChild(iHeart);
-                divCard.appendChild(divName);
-                divCard.appendChild(img);
-                divFooter.appendChild(pPower);
-                divFooter.appendChild(btn);
-                divCard.appendChild(divFooter);
-                parentDiv.appendChild(divCard);
-            });
-        });
-    }   
-    catch (error) {
-        const errorMsg = document.createElement('p');
-        errorMsg.textContent = `nombre : ${error.message}`
-        parentDiv.appendChild(errorMsg);
-    }
-}
-
-const getByUrl = async (url2) => {
-    const res = await fetch(url2);
+const pokemonCards = async (url) => {
+  try {
+    const res = await fetch(url);
     const data = await res.json();
-    return data;
+
+    pokemons = data.results;
+    
+    pokemons.forEach(async (element) => {
+      const divCard = document.createElement("div");
+      divCard.className = "Cards";
+      const divName = document.createElement("div");
+      divName.className = "NameBox";
+      const pName = document.createElement("p");
+      pName.className = "NameText";
+      const iHeart = document.createElement("i");
+      iHeart.className = "fa-sharp fa-regular fa-heart";
+      const imgCard = document.createElement("div");
+      imgCard.className = "divImg";
+      const img = document.createElement("img");
+      img.className = "CardImg";
+      const divFooter = document.createElement("div");
+      divFooter.className = "PowerBox";
+      const pPower = document.createElement("p");
+      pPower.className = "PowerText";
+      const btn = document.createElement("button:sumit");
+      btn.textContent = "Buy";
+      btn.className = "Buttonn";
+      const [type1, type2] = await getType(element.url);
+
+      pName.textContent =
+        element.name.charAt(0).toUpperCase() +
+        element.name.slice(1).toLowerCase();
+
+      countCards++;
+      const totalCards = document.querySelector(".cardsCount");
+      totalCards.textContent = `${countCards} Cards`;
+
+      const pokemonData = await getPokemonData(element.url);
+
+      img.src = pokemonData.sprites.other["home"].front_default;
+      pPower.textContent = `Level: ${pokemonData.base_experience}`;
+
+      divCard.appendChild(divName);
+      divName.appendChild(pName);
+      divName.appendChild(iHeart);
+      divCard.appendChild(imgCard);
+      imgCard.appendChild(img);
+      divCard.appendChild(divFooter);
+      divFooter.appendChild(pPower);
+      divFooter.appendChild(btn);
+      divCard.setAttribute("data-type1", type1);
+      divCard.setAttribute("data-type2", type2);
+
+      parentDiv.appendChild(divCard);
+
+    
+
+    });
+  }
+    catch (error) {
+    const errorMsg = document.createElement("p");
+    errorMsg.textContent = `nombre : ${error.message}`;
+    parentDiv.appendChild(errorMsg);
+    }
+};
+
+const cards = document.querySelectorAll(".Cards");
+cards.forEach((card) => {
+  const cardType1 = card.getAttribute("data-type1");
+  const cardType2 = card.getAttribute("data-type2");
+});
+
+const getType = async (url) => {
+  const res = await fetch(url);
+  const data = await res.json();
+  const types = data.types.map((typePokemon) => typePokemon.type.name);
+  return types;
+};
+
+const getPokemonData = async (url) => {
+  const res = await fetch(url);
+  const data = await res.json();
+  return data;
+};
+
+pokemonCards(url);
+
+const filter = document.querySelectorAll(".type");
+
+filter.forEach((filterType) => {
+  filterType.addEventListener("click", (event) => {
+    event.preventDefault();
+    const type = filterType.textContent.toLowerCase();
+    filterByType(type);
+  });
+});
+
+const filterByType = (type) => {
+  const cards = document.querySelectorAll(".Cards");
+  
+  cards.forEach((card) => {
+    const cardType1 = card.getAttribute("data-type1");
+    const cardType2 = card.getAttribute("data-type2");
+
+    if (type === "all" || cardType1 === type || cardType2 === type) {
+      card.style.display = "block";
+    } else {
+      card.style.display = "none";
+    }
+  });
 }
 
-fetchApi(url)
+
+const loadMoreCards = () => {
+  offset += limit;
+  const limitloadMoreCards = offset + limit;
+  showFilteredCards(limitloadMoreCards);
+
+};
+
+
+
+const showFilteredCards = (limit) => {
+  
+ pokemonCards(`${url}?offset=${limit}`)
+};
+
+
+const btnMore = document.querySelector(".btnMore");
+btnMore.addEventListener("click", loadMoreCards);
+
+
